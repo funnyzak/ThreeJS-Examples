@@ -122,7 +122,8 @@ class GLBModel {
       (xhr) => {
         const percentComplete = (xhr.loaded / xhr.total) * 100;
         this.progressElement.style.width = percentComplete + '%';
-        this.loadingText.textContent = 'Loading ' + Math.round(percentComplete) + '%';
+        this.loadingText.textContent =
+          percentComplete >= 100 ? 'Finalizing...' : 'Loading ' + Math.round(percentComplete) + '%';
       },
       (error) => {
         console.error('An error happened', error);
