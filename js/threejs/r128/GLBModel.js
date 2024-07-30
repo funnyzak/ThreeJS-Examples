@@ -98,6 +98,9 @@ class GLBModel {
 
   static loadModel() {
     const loader = new THREE.GLTFLoader();
+    const startTime = Date.now();
+    let simulatedProgress = 0;
+
     loader.load(
       this.modelPath,
       (gltf) => {
@@ -120,7 +123,14 @@ class GLBModel {
         this.loadingScreen.style.display = 'none';
       },
       (xhr) => {
-        const percentComplete = (xhr.loaded / xhr.total) * 100;
+        let percentComplete;
+        if (xhr.total) {
+          percentComplete = (xhr.loaded / xhr.total) * 100;
+        } else {
+          const elapsed = Date.now() - startTime;
+          simulatedProgress = Math.min((elapsed / 2000) * 100, 95); // 模拟进度，最高到95%
+          percentComplete = simulatedProgress;
+        }
         this.progressElement.style.width = percentComplete + '%';
         this.loadingText.textContent =
           percentComplete >= 100 ? 'Finalizing...' : 'Loading ' + Math.round(percentComplete) + '%';
