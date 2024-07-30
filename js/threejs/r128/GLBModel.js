@@ -128,7 +128,7 @@ class GLBModel {
           percentComplete = (xhr.loaded / xhr.total) * 100;
         } else {
           const elapsed = Date.now() - startTime;
-          simulatedProgress = Math.min((elapsed / 5000) * 100, 99);
+          simulatedProgress = Math.min((elapsed / 15000) * 100, 97);
           percentComplete = simulatedProgress;
         }
         this.progressElement.style.width = percentComplete + '%';
