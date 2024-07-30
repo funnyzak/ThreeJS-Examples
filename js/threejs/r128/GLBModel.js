@@ -42,6 +42,7 @@ class GLBModel {
     this.ambientLightIntensity = config.ambientLightIntensity;
     this.controlsConfig = config.controls;
     this.modelPath = config.modelPath;
+    this.enabledShadow = config.enabledShadow || false;
 
     this.initLoadingScreen(config.loadingScreenId);
     this.initScene();
@@ -73,6 +74,11 @@ class GLBModel {
     this.renderer.outputEncoding = THREE.sRGBEncoding;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1;
+
+    if (this.enabledShadow) {
+      this.renderer.shadowMap.enabled = true;
+      this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    }
     this.container.appendChild(this.renderer.domElement);
 
     this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
@@ -82,16 +88,33 @@ class GLBModel {
     this.scene.add(ambientLight);
 
     const directionalLight1 = new THREE.DirectionalLight(0xffffff, this.lightIntensity);
-    directionalLight1.position.set(1, 1, 1);
+    directionalLight1.position.set(1, 1, 1); // light shining from right top
     this.scene.add(directionalLight1);
 
     const directionalLight2 = new THREE.DirectionalLight(0xffffff, this.lightIntensity);
-    directionalLight2.position.set(-1, -1, -1);
+    directionalLight2.position.set(-1, -1, -1); // light shining from behind
     this.scene.add(directionalLight2);
 
     const directionalLight3 = new THREE.DirectionalLight(0xffffff, this.lightIntensity);
-    directionalLight3.position.set(0, 1, 0);
+    directionalLight3.position.set(0, 1, 0); // light shining from top
+    directionalLight3.castShadow = this.enabledShadow;
     this.scene.add(directionalLight3);
+    if (this.enabledShadow) {
+      directionalLight1.shadow.mapSize.width = 1024;
+      directionalLight1.shadow.mapSize.height = 1024;
+      directionalLight1.shadow.camera.near = 1;
+      directionalLight1.shadow.camera.far = 6;
+    }
+
+    if (this.enabledShadow) {
+      const planeGeometry = new THREE.PlaneGeometry(10, 10);
+      const planeMaterial = new THREE.ShadowMaterial({ opacity: 0.3 });
+      this.shadowPlane = new THREE.Mesh(planeGeometry, planeMaterial);
+      this.shadowPlane.rotation.x = -Math.PI / 2;
+      this.shadowPlane.position.y = -1;
+      this.shadowPlane.receiveShadow = true;
+      this.scene.add(this.shadowPlane);
+    }
 
     window.addEventListener('resize', this.onWindowResize.bind(this), false);
   }
@@ -119,6 +142,13 @@ class GLBModel {
         this.model.scale.setScalar(scale);
         this.model.position.sub(center.multiplyScalar(scale));
 
+        this.model.traverse((node) => {
+          if (node.isMesh) {
+            node.castShadow = this.enabledShadow;
+            node.receiveShadow = this.enabledShadow;
+          }
+        });
+
         this.scene.add(this.model);
         this.loadingScreen.style.display = 'none';
       },
@@ -128,7 +158,7 @@ class GLBModel {
           percentComplete = (xhr.loaded / xhr.total) * 100;
         } else {
           const elapsed = Date.now() - startTime;
-          simulatedProgress = Math.min((elapsed / 15000) * 100, 97);
+          simulatedProgress = Math.min((elapsed / 25000) * 100, 97);
           percentComplete = simulatedProgress;
         }
         this.progressElement.style.width = percentComplete + '%';
