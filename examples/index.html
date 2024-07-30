@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ThreeJS Examples</title>
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #1a2c3a, #143215);
+        background-size: 400% 400%;
+        color: #ffffff;
+        animation: gradient 10s ease infinite;
+      }
+      @keyframes gradient {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px 30px;
+      }
+      h1 {
+        text-align: center;
+        color: #4caf50;
+      }
+      .group {
+        margin-bottom: 30px;
+      }
+      .group h2 {
+        color: #2196f3;
+        border-bottom: 1px solid #2196f3;
+        padding-bottom: 5px;
+      }
+      ul {
+        list-style-type: none;
+        padding-left: 0;
+      }
+      li {
+        margin-bottom: 10px;
+        color: #9e9e9e;
+      }
+      a {
+        color: #ffc107;
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+      a:hover {
+        color: #ffeb3b;
+      }
+      footer {
+        text-align: center;
+        margin-top: 50px;
+        padding: 10px;
+        font-size: 0.8em;
+        color: #9e9e9e;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>ThreeJS Examples</h1>
+
+      <div class="group">
+        <h2>GLB Loader</h2>
+        <ul>
+          <li>
+            <a href="glb/dragon.html">Dragon</a> - A 3D model of a gold dragon coin.
+          </li>
+          <li>
+            <a href="glb/goldcoin.html">Gold Coin</a> - A 3D model of an American
+            gold coin.
+          </li>
+          <li>
+            <a href="glb/earth2.html">Earth</a> - A 3D model of the earth.
+        </ul>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; 2024 ThreeJS Examples. By <a href="https://github.com/funnyzak">funnyzak</a>.</p>
+    </footer>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NCG2P0Q11R"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'G-NCG2P0Q11R');
+    </script>
+  </body>
+</html>

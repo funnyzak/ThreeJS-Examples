@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A 3D model of an American gold coin</title>
+    <link rel="stylesheet" href="../../css/style.css" />
+    <script src="https://cdn.jsdelivr.net/gh/funnyzak/threejs-examples@main/js/threejs/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/funnyzak/threejs-examples@main/js/threejs/r128/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/funnyzak/threejs-examples@main/js/threejs/r128/OrbitControls.js"></script>
+    <script src="../../js/threejs/r128/GLBModel.js"></script>
+  </head>
+  <body>
+    <div id="loading-screen">
+      <h3 id="loading-text">Loading...</h3>
+      <div id="progress-bar"><div id="progress"></div></div>
+    </div>
+    <div id="container"></div>
+    <script>
+      const config = {
+        containerId: 'container',
+        loadingScreenId: 'loading-screen',
+        modelPath: '../../assets/models/glb/gold_coin.glb',
+        autoRotate: true,
+        rotationSpeed: 0.002,
+        cameraPosition: { x: 0, y: 0, z: 3 },
+        modelRotation: { x: 0, y: 0, z: 0 },
+        lightIntensity: 0.8,
+        ambientLightIntensity: 0.7,
+        controls: {
+          enableDamping: true,
+          dampingFactor: 0.05,
+          screenSpacePanning: false,
+          minDistance: 1,
+          maxDistance: 10,
+          maxPolarAngle: Math.PI / 2,
+        },
+      };
+
+      GLBModel.init(config);
+    </script>
+    <div class="footer">
+      model by
+      <a
+        href="https://sketchfab.com/3d-models/gold-coin-3d20e14205734658932882393125ca2d"
+        target="_blank"
+        rel="noopener noreferrer"
+        >sketchfab</a
+      >, code by <a href="https://yycc.dev" rel="noopener noreferrer" target="_blank">funnyzak</a>
+    </div>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NCG2P0Q11R"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'G-NCG2P0Q11R');
+    </script>
+  </body>
+</html>
