@@ -3,6 +3,7 @@ name: GithubPages
 on:
   push:
     branches:
+      - test
       - main
     paths:
       - 'examples/**'
@@ -13,6 +14,8 @@ on:
 
   workflow_dispatch:
 
+permissions:
+  contents: write
 
 jobs:
   build:
