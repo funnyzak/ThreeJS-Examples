@@ -23,16 +23,18 @@
     <div id="container"></div>
     <script>
       const config = {
+        debug: false,
         containerId: 'container',
         loadingScreenId: 'loading-screen',
         modelPath: '../../assets/models/glb/gold_coin.glb',
         autoRotate: true,
-        rotationSpeed: 0.002,
+        rotationSpeed: 0.001,
         cameraPosition: { x: 0, y: 0, z: 3 },
-        modelRotation: { x: 0, y: 0, z: 0 },
+        modelRotation: { x: 0, y: 60, z: 0 },
         lightIntensity: 0.8,
         ambientLightIntensity: 0.7,
-        enabledShadow: true,
+        enabledShadow: false,
+        shadowAngle: { x: 0, y: 0.5, z: 0 },
         enableControls: true,
         controls: {
           enableZoom: false,
