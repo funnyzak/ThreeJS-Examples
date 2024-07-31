@@ -40,7 +40,18 @@ class GLBModel {
     this.modelRotation = config.modelRotation || { x: 0, y: 0, z: 0 };
     this.lightIntensity = config.lightIntensity;
     this.ambientLightIntensity = config.ambientLightIntensity;
-    this.controlsConfig = config.controls;
+    this.enableControls = config.enableControls !== undefined ? config.enableControls : true;
+    this.controlsConfig = {
+      enableDamping: true,
+      dampingFactor: 0.05,
+      screenSpacePanning: false,
+      minDistance: 1,
+      maxDistance: 10,
+      maxPolarAngle: Math.PI / 2,
+      enablePan: true,
+      enableZoom: true,
+      ...config.controls,
+    };
     this.modelPath = config.modelPath;
     this.enabledShadow = config.enabledShadow || false;
 
@@ -81,8 +92,13 @@ class GLBModel {
     }
     this.container.appendChild(this.renderer.domElement);
 
-    this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
-    Object.assign(this.controls, this.controlsConfig);
+    if (this.enableControls) {
+      this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+      Object.assign(this.controls, this.controlsConfig);
+
+      this.controls.enablePan = this.controlsConfig.enablePan;
+      this.controls.enableZoom = this.controlsConfig.enableZoom;
+    }
 
     const ambientLight = new THREE.AmbientLight(0xffffff, this.ambientLightIntensity);
     this.scene.add(ambientLight);
@@ -179,7 +195,10 @@ class GLBModel {
 
   static animate() {
     requestAnimationFrame(this.animate.bind(this));
-    this.controls.update();
+    
+    if (this.enableControls) {
+      this.controls.update();
+    }
 
     if (this.autoRotate && this.scene.children.length > 0) {
       this.scene.rotation.y += this.rotationSpeed;
