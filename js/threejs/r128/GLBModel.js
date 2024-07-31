@@ -33,6 +33,7 @@
  */
 class GLBModel {
   static init(config) {
+    this.debug = config.debug || false;
     this.container = document.getElementById(config.containerId);
     this.autoRotate = config.autoRotate;
     this.rotationSpeed = config.rotationSpeed;
@@ -54,6 +55,7 @@ class GLBModel {
     };
     this.modelPath = config.modelPath;
     this.enabledShadow = config.enabledShadow || false;
+    this.shadowAngle = config.shadowAngle || { x: 0, y: 1, z: 0 }; // default light shining from top
 
     this.initLoadingScreen(config.loadingScreenId);
     this.initScene();
@@ -111,19 +113,24 @@ class GLBModel {
     directionalLight2.position.set(-1, -1, -1); // light shining from behind
     this.scene.add(directionalLight2);
 
-    const directionalLight3 = new THREE.DirectionalLight(0xffffff, this.lightIntensity);
-    directionalLight3.position.set(0, 1, 0); // light shining from top
-    directionalLight3.castShadow = this.enabledShadow;
-    this.scene.add(directionalLight3);
-    if (this.enabledShadow) {
-      directionalLight1.shadow.mapSize.width = 1024;
-      directionalLight1.shadow.mapSize.height = 1024;
-      directionalLight1.shadow.camera.near = 1;
-      directionalLight1.shadow.camera.far = 6;
-    }
+    this.mainLight = new THREE.DirectionalLight(0xffffff, this.lightIntensity);
+    this.mainLight.position.set(this.shadowAngle.x, this.shadowAngle.y, this.shadowAngle.z);
+
+    this.mainLight.castShadow = this.enabledShadow;
+    this.scene.add(this.mainLight);
 
     if (this.enabledShadow) {
-      const planeGeometry = new THREE.PlaneGeometry(10, 10);
+      this.mainLight.shadow.mapSize.width = 1024;
+      this.mainLight.shadow.mapSize.height = 1024;
+      this.mainLight.shadow.camera.near = 1;
+      this.mainLight.shadow.camera.far = 10;
+
+      if (this.debug) {
+        const helper = new THREE.DirectionalLightHelper(this.mainLight, 5);
+        this.scene.add(helper);
+      }
+
+      const planeGeometry = new THREE.PlaneGeometry(50, 50); // 增大平面尺寸
       const planeMaterial = new THREE.ShadowMaterial({ opacity: 0.3 });
       this.shadowPlane = new THREE.Mesh(planeGeometry, planeMaterial);
       this.shadowPlane.rotation.x = -Math.PI / 2;
@@ -195,7 +202,7 @@ class GLBModel {
 
   static animate() {
     requestAnimationFrame(this.animate.bind(this));
-    
+
     if (this.enableControls) {
       this.controls.update();
     }
